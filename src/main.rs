@@ -34,6 +34,9 @@ fn solve(n: u32) {
             4 => {
                 problems::p4()
             }
+            5 => {
+                problems::p5()
+            }
             _ => {
                 0
             }

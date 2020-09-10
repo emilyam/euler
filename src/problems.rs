@@ -28,7 +28,7 @@ pub fn p2() -> i64 {
     sum
 }
 
-///What is the largest prime factor of the number 600851475143 ?
+/// What is the largest prime factor of the number 600851475143 ?
 pub fn p3() -> i64 {
     let target = 600851475143;
     let mut curr_val = target;
@@ -51,7 +51,7 @@ pub fn p3() -> i64 {
     curr_prime
 }
 
-///Find the largest palindrome made from the product of two 3-digit numbers.
+/// Find the largest palindrome made from the product of two 3-digit numbers.
 pub fn p4() -> i64 {
     let mut largest_palindrome = 0;
     for x in 100..1000 {
@@ -62,4 +62,22 @@ pub fn p4() -> i64 {
         }
     }
     largest_palindrome
+}
+
+/// What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
+pub fn p5() -> i64 {
+    let lcm = 9699690; //lcm of all primes below 20; answer must be a multiple
+    let mut index = lcm;
+    let mut evenly_divides = false;
+    while !evenly_divides {
+        index += lcm;
+        evenly_divides = true;
+        for n in 2..21 {
+            if index % n != 0 {
+                evenly_divides = false;
+                break;
+            }
+        }
+    }
+    index
 }
