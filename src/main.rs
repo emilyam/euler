@@ -10,14 +10,29 @@ fn main() {
             Some(n) => {
                 solve(n.parse::<u32>().unwrap());
             }
-            None => { println!("Provide a problem number as so: \"{} n\"", cmd); }
+            None => {
+                println!("Provide a problem number as so: \"{} n\"", cmd);
+            }
         }
     }
 }
 
 fn solve(n: u32) {
-    println!("{}", match n {
-        1 => {problems::p1()}
-        _ => { 0 }
-    })
+    println!(
+        "{}",
+        match n {
+            1 => {
+                problems::p1()
+            }
+            2 => {
+                problems::p2()
+            }
+            3 => {
+                problems::p3()
+            }
+            _ => {
+                0
+            }
+        }
+    )
 }
