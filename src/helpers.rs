@@ -10,7 +10,7 @@ pub fn is_palindrome(n: i64) -> bool {
 
 pub fn count_divisors(n: u64) -> u64 {
     let mut divisors = 1;
-    for d in 1..((n/2)+1){
+    for d in 1..((n / 2) + 1) {
         if n % d == 0 {
             divisors += 1;
         }
