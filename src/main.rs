@@ -1,3 +1,5 @@
+mod problems;
+
 fn main() {
     let mut a = std::env::args();
     let a1 = a.next();
@@ -14,8 +16,8 @@ fn main() {
 }
 
 fn solve(n: u32) {
-    match n {
-        0 => { println!("Project Euler is not zero-indexed.") }
-        _ => { println!("Problem {} has not yet been solved.", n); }
-    }
+    println!("{}", match n {
+        1 => {problems::p1()}
+        _ => { 0 }
+    })
 }
