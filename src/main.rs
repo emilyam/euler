@@ -1,3 +1,4 @@
+mod helpers;
 mod problems;
 
 fn main() {
@@ -29,6 +30,9 @@ fn solve(n: u32) {
             }
             3 => {
                 problems::p3()
+            }
+            4 => {
+                problems::p4()
             }
             _ => {
                 0

@@ -1,3 +1,5 @@
+use super::helpers::*;
+
 /// Find the sum of all the multiples of 3 or 5 below 1000.
 pub fn p1() -> i64 {
     let mut sum: i64 = 0;
@@ -47,4 +49,17 @@ pub fn p3() -> i64 {
     }
     assert_eq!(curr_val, target);
     curr_prime
+}
+
+///Find the largest palindrome made from the product of two 3-digit numbers.
+pub fn p4() -> i64 {
+    let mut largest_palindrome = 0;
+    for x in 100..1000 {
+        for y in x..1000 {
+            if (x * y > largest_palindrome) && is_palindrome(x * y) {
+                largest_palindrome = x * y;
+            }
+        }
+    }
+    largest_palindrome
 }
