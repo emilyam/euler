@@ -43,8 +43,11 @@ fn solve(n: u32) {
             7 => {
                 problems::p7()
             }
+            8 => {
+                problems::p8()
+            }
             _ => {
-                0
+                String::from("0")
             }
         }
     )
