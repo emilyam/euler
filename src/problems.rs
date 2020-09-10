@@ -144,3 +144,30 @@ pub fn p8() -> String {
     }
     largest.to_string()
 }
+
+/// There exists exactly one Pythagorean triplet for which a + b + c = 1000.
+/// Find the product abc.
+pub fn p9() -> String {
+    for a in 1..333 {
+        for b in (a + 1)..((1000 - a) / 2) {
+            let c = 1000 - a - b;
+            if (a * a + b * b) == (c * c) {
+                return format!("{} * {} * {} = {}", a, b, c, a * b * c);
+            }
+        }
+    }
+    0.to_string()
+}
+
+/// Find the sum of all the primes below two million.
+pub fn p10() -> String {
+    let mut primes = vec![2];
+    let mut n = 1;
+    while n < 2_000_000 {
+        n += 2;
+        if !primes.iter().any(|x| n % x == 0) {
+            primes.push(n);
+        }
+    }
+    primes.iter().sum::<u64>().to_string()
+}
