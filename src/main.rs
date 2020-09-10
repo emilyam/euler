@@ -37,6 +37,12 @@ fn solve(n: u32) {
             5 => {
                 problems::p5()
             }
+            6 => {
+                problems::p6()
+            }
+            7 => {
+                problems::p7()
+            }
             _ => {
                 0
             }

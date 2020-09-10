@@ -81,3 +81,28 @@ pub fn p5() -> i64 {
     }
     index
 }
+
+/// Find the difference between the sum of the squares of the first one hundred natural numbers and the square of the sum.
+pub fn p6() -> i64 {
+    let mut sum: i64 = 0;
+    let mut sumsquares: i64 = 0;
+    for n in 1..101 {
+        sum += n;
+        sumsquares += n * n;
+    }
+    let squaresum = sum * sum;
+    squaresum - sumsquares
+}
+
+/// What is the 10 001st prime number?
+pub fn p7() -> i64 {
+    let mut primes = vec![2];
+    let mut n = 1;
+    while primes.len() != 10_001 {
+        n += 2;
+        if !primes.iter().any(|x| n % x == 0) {
+            primes.push(n);
+        }
+    }
+    n
+}
