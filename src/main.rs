@@ -9,7 +9,7 @@ fn main() {
     if let Some(cmd) = a1 {
         match a2 {
             Some(n) => {
-                solve(n.parse::<u32>().unwrap());
+                solve(n.parse::<usize>().unwrap());
             }
             None => {
                 println!("Provide a problem number as so: \"{} n\"", cmd);
@@ -18,52 +18,29 @@ fn main() {
     }
 }
 
-fn solve(n: u32) {
-    println!(
-        "{}",
-        match n {
-            1 => {
-                problems::p1()
-            }
-            2 => {
-                problems::p2()
-            }
-            3 => {
-                problems::p3()
-            }
-            4 => {
-                problems::p4()
-            }
-            5 => {
-                problems::p5()
-            }
-            6 => {
-                problems::p6()
-            }
-            7 => {
-                problems::p7()
-            }
-            8 => {
-                problems::p8()
-            }
-            9 => {
-                problems::p9()
-            }
-            10 => {
-                problems::p10()
-            }
-            11 => {
-                problems::p11()
-            }
-            12 => {
-                problems::p12()
-            }
-            13 => {
-                problems::p13()
-            }
-            _ => {
-                String::from("0")
-            }
-        }
-    )
+fn solve(n: usize) {
+    use problems::*;
+    use std::collections::HashMap;
+
+    let problems: Vec<(usize, &dyn Fn() -> String)> = vec![
+        (1, &p1),
+        (2, &p2),
+        (3, &p3),
+        (4, &p4),
+        (5, &p5),
+        (6, &p6),
+        (7, &p7),
+        (8, &p8),
+        (9, &p9),
+        (10, &p10),
+        (11, &p11),
+        (12, &p12),
+        (13, &p13),
+    ];
+    let problems: HashMap<usize, &dyn Fn() -> String> = problems.iter().cloned().collect();
+    if problems.contains_key(&n) {
+        println!("{}", (*(problems.get(&n).unwrap())()).to_string());
+    } else {
+        println!("No such solution.");
+    }
 }
