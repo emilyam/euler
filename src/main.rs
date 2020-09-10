@@ -52,6 +52,9 @@ fn solve(n: u32) {
             10 => {
                 problems::p10()
             }
+            11 => {
+                problems::p11()
+            }
             _ => {
                 String::from("0")
             }
