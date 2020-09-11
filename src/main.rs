@@ -53,7 +53,7 @@ fn solve(n: usize, optimized: bool) {
     ];
     let problems: HashMap<usize, &dyn Fn() -> String> = problems.iter().cloned().collect();
 
-    let optimized_problems: Vec<(usize, &dyn Fn() -> String)> = vec![];
+    let optimized_problems: Vec<(usize, &dyn Fn() -> String)> = vec![(10, &o10)];
     let optimized_problems: HashMap<usize, &dyn Fn() -> String> =
         optimized_problems.iter().cloned().collect();
 

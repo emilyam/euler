@@ -401,7 +401,7 @@ pub fn p14() -> String {
 
     // Fill out table of C(n)
     lengths[0] = 1; // C(1) = 1
-    for n in 2..1_000_000 {
+    for n in 500_000..1_000_000 {
         if lengths[n - 1] != 0 {
             continue;
         }
