@@ -471,3 +471,13 @@ pub fn p15() -> String {
     let num_routes = sequence_product(21, 40) / factorial(20);
     num_routes.to_string()
 }
+
+/// What is the sum of the digits of the number 2^1000?
+pub fn p16() -> String {
+    let n = 2.to_biguint().unwrap().pow(1000);
+    n.to_str_radix(10)
+        .chars()
+        .map(|c| c.to_digit(10).unwrap())
+        .sum::<u32>()
+        .to_string()
+}
