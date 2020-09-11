@@ -1,5 +1,5 @@
 use super::helpers::*;
-use num_bigint::BigUint;
+use num_bigint::{BigUint, ToBigUint};
 
 /// Find the sum of all the multiples of 3 or 5 below 1000.
 pub fn p1() -> String {
@@ -452,4 +452,22 @@ pub fn p14() -> String {
              and is the longest such sequence beginning below one million.",
         longest.0, longest.1
     )
+}
+
+/// How many [...] routes are there through a 20×20 grid?
+pub fn p15() -> String {
+    // The solution can be easily calculated as
+    // P(40,40)/(C(20,20)^2) = C(40,20)
+    //                       = (∏(i=21->40)i)/20!
+
+    let sequence_product = |start: u32, end: u32| -> BigUint {
+        let mut f = 1.to_biguint().unwrap();
+        for i in start..(end + 1) {
+            f *= i.to_biguint().unwrap()
+        }
+        f
+    };
+    let factorial = |n| sequence_product(1, n);
+    let num_routes = sequence_product(21, 40) / factorial(20);
+    num_routes.to_string()
 }
