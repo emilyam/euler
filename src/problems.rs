@@ -272,7 +272,7 @@ pub fn p11() -> String {
 pub fn p12() -> String {
     let mut n: u64 = 7;
     let mut tri: u64 = 28;
-    while count_divisors(tri) <= (500 as u64) {
+    while count_divisors(tri) <= 500 {
         n += 1;
         tri += n;
     }

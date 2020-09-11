@@ -1,26 +1,8 @@
+use crate::helpers::*;
+
 /// Find the sum of all the primes below two million.
 pub fn o10() -> String {
-    const LIMIT: usize = 2_000_000;
-    const SQRT_LIMIT: usize = 1414;
-
-    // Table for sieve of Eratosthenes, where oddprimes[i] = is_prime(2i+1)
-    // true means prime, false means composite
-    let mut oddprimes = [true; LIMIT / 2];
-    oddprimes[0] = false; // 1 is not a prime
-
-    // To compute odd primes under LIMIT, consider all odds in [2,SQRT_LIMIT]
-    for n in 1..(SQRT_LIMIT / 2) {
-        if !oddprimes[n] {
-            continue;
-        }
-
-        // Flag all odd multiples of odd primes as composite
-        let mut x = 3 * n + 1;
-        while x < LIMIT / 2 {
-            oddprimes[x] = false;
-            x += 2 * n + 1;
-        }
-    }
+    let oddprimes = odd_primes_under(2_000_000);
 
     // Sum all primes under LIMIT
     let sum = 2 + oddprimes
@@ -30,4 +12,24 @@ pub fn o10() -> String {
         .map(|(n, _)| 2 * n + 1)
         .sum::<usize>();
     sum.to_string()
+}
+
+/// What is the value of the first triangle number to have over five hundred divisors?
+pub fn o12() -> String {
+    let mut n = 1;
+    let tri = |n| n * (n + 1) / 2;
+    let mut divisors = 1;
+    let mut div_n;
+    let mut div_n_next = 1;
+    while divisors <= 500 {
+        n += 1;
+        div_n = div_n_next;
+        div_n_next = if n % 2 == 0 {
+            count_divisors(n + 1)
+        } else {
+            count_divisors((n + 1) / 2)
+        };
+        divisors = div_n * div_n_next;
+    }
+    tri(n).to_string()
 }
