@@ -51,6 +51,7 @@ fn solve(n: usize, optimized: bool) {
         (14, &p14),
         (15, &p15),
         (16, &p16),
+        (17, &p17),
     ];
     let problems: HashMap<usize, &dyn Fn() -> String> = problems.iter().cloned().collect();
 

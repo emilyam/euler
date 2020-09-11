@@ -481,3 +481,41 @@ pub fn p16() -> String {
         .sum::<u32>()
         .to_string()
 }
+
+/// If all the numbers from 1 to 1000 (one thousand) inclusive
+/// were written out in words, how many letters would be used?
+pub fn p17() -> String {
+    let under_20_len = [0, 3, 3, 5, 4, 4, 3, 5, 5, 4, 3, 6, 6, 8, 8, 7, 7, 9, 8, 8];
+    let tens_name_len = [6, 6, 5, 5, 5, 7, 6, 6]; // 20, 30, ... 90
+    let hundred_len = 7; // "hundred"
+    let and_len = 3; // "and"
+    let one_thousand_len = 11; // "one thousand"
+
+    // returns English name for number in range [1, 1000]
+    let english = |n: usize| {
+        if n < 1 || n > 1000 {
+            None
+        } else if n == 1000 {
+            Some(one_thousand_len)
+        } else {
+            let mut sum;
+            if n % 100 < 20 {
+                sum = under_20_len[n % 100]
+            } else {
+                sum = under_20_len[n % 10] + tens_name_len[(n % 100) / 10 - 2];
+            }
+            if n >= 100 {
+                sum += under_20_len[n / 100] + hundred_len;
+                if n % 100 != 0 {
+                    sum += and_len;
+                }
+            }
+            Some(sum)
+        }
+    };
+
+    (1..1001)
+        .map(|n| english(n).unwrap())
+        .sum::<usize>()
+        .to_string()
+}
