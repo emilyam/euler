@@ -36,6 +36,7 @@ fn solve(n: usize) {
         (11, &p11),
         (12, &p12),
         (13, &p13),
+        (14, &p14),
     ];
     let problems: HashMap<usize, &dyn Fn() -> String> = problems.iter().cloned().collect();
     if problems.contains_key(&n) {

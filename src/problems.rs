@@ -390,3 +390,66 @@ pub fn p13() -> String {
     }
     sum.to_string()[0..10].to_string()
 }
+
+/// Which starting number, under one million, produces the longest [Collatz sequence]?
+pub fn p14() -> String {
+    // Table of C(n), where C(n) is the length of
+    // the Collatz sequence beginning at n
+    let mut lengths = [0; 999_999];
+    // (n, C(n)) for the largest C(n) so far encountered
+    let mut longest = (1, 1);
+
+    // Fill out table of C(n)
+    lengths[0] = 1; // C(1) = 1
+    for n in 2..1_000_000 {
+        if lengths[n - 1] != 0 {
+            continue;
+        }
+        let mut len = 1;
+        let mut x = n;
+
+        // Tracks all x encountered for which C(x) is unknown
+        let mut lengths_to_add: Vec<(usize, usize)> = vec![];
+
+        // Loop while C(x) is unknown
+        while x >= 1_000_000 || lengths[x - 1] == 0 {
+            // Find next number in sequence
+            if x % 2 == 0 {
+                x /= 2
+            } else {
+                x = 3 * x + 1
+            }
+
+            if x < 1_000_000 {
+                if lengths[x - 1] != 0 {
+                    // C(x) is known, calculate C(n) and stop
+                    len += lengths[x - 1];
+                    break;
+                } else {
+                    // C(x) unknown, calculate later based on C(n)
+                    lengths_to_add.push((len, x));
+                }
+            }
+            len += 1;
+        }
+
+        // For each x encountered where C(x) was unknown, record C(x)
+        for (diff, x) in lengths_to_add.iter() {
+            lengths[x - 1] = len - diff;
+        }
+        // Then record C(n)
+        lengths[n - 1] = len;
+        // Track C(n) if C(n) > C(m) for any m < n.
+        // Note C(n) is guaranteed to be greater than C(x)
+        // for any x that occurs in the Collatz sequence beginning with n
+        // so we don't need to consider any x in lengths_to_add
+        if len > longest.1 {
+            longest = (n, len);
+        }
+    }
+    format!(
+        "The Collatz sequence beginning with {} has length {} \
+             and is the longest such sequence beginning below one million.",
+        longest.0, longest.1
+    )
+}

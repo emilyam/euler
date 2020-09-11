@@ -1,3 +1,4 @@
+/// Determines if n is a palindrome in decimal representation
 pub fn is_palindrome(n: i64) -> bool {
     let s = n.to_string().chars().collect::<Vec<char>>();
     for i in 0..(s.len() / 2) {
@@ -8,6 +9,7 @@ pub fn is_palindrome(n: i64) -> bool {
     true
 }
 
+/// Counts the number of natural divisors of n
 pub fn count_divisors(n: u64) -> u64 {
     let mut divisors = 1;
     for d in 1..((n / 2) + 1) {
