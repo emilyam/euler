@@ -147,7 +147,7 @@ pub fn p9() -> String {
         for b in (a + 1)..((1000 - a) / 2) {
             let c = 1000 - a - b;
             if (a * a + b * b) == (c * c) {
-                return format!("{} * {} * {} = {}", a, b, c, a * b * c);
+                return (a * b * c).to_string()
             }
         }
     }
@@ -156,15 +156,16 @@ pub fn p9() -> String {
 
 /// Find the sum of all the primes below two million.
 pub fn p10() -> String {
-    let mut primes = vec![2];
-    let mut n = 1;
-    while n < 2_000_000 {
-        n += 2;
-        if !primes.iter().any(|x| n % x == 0) {
-            primes.push(n);
-        }
-    }
-    primes.iter().sum::<u64>().to_string()
+    let oddprimes = odd_primes_under(2_000_000);
+
+    // Sum all primes under LIMIT
+    let sum = 2 + oddprimes
+        .iter()
+        .enumerate()
+        .filter(|(_, &is_prime)| is_prime)
+        .map(|(n, _)| 2 * n + 1)
+        .sum::<usize>();
+    sum.to_string()
 }
 
 /// What is the greatest product of four adjacent numbers in the same direction
@@ -222,13 +223,22 @@ pub fn p11() -> String {
 
 /// What is the value of the first triangle number to have over five hundred divisors?
 pub fn p12() -> String {
-    let mut n: u64 = 7;
-    let mut tri: u64 = 28;
-    while count_divisors(tri) <= 500 {
+    let mut n = 1;
+    let tri = |n| n * (n + 1) / 2;
+    let mut divisors = 1;
+    let mut div_n;
+    let mut div_n_next = 1;
+    while divisors <= 500 {
         n += 1;
-        tri += n;
+        div_n = div_n_next;
+        div_n_next = if n % 2 == 0 {
+            count_divisors(n + 1)
+        } else {
+            count_divisors((n + 1) / 2)
+        };
+        divisors = div_n * div_n_next;
     }
-    tri.to_string()
+    tri(n).to_string()
 }
 
 /// Work out the first ten digits of the sum of the following one-hundred 50-digit numbers.
@@ -399,11 +409,7 @@ pub fn p14() -> String {
             longest = (n, len);
         }
     }
-    format!(
-        "The Collatz sequence beginning with {} has length {} \
-             and is the longest such sequence beginning below one million.",
-        longest.0, longest.1
-    )
+    longest.1.to_string()
 }
 
 /// How many [...] routes are there through a 20×20 grid?
