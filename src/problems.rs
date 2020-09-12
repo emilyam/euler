@@ -551,3 +551,16 @@ pub fn p19() -> String {
     }
     sum.to_string()
 }
+
+/// Find the sum of the digits in the number 100!
+pub fn p20() -> String {
+    let f100 = (1..101)
+        .map(|n| n.to_biguint().unwrap())
+        .fold(1.to_biguint().unwrap(), |acc, n| acc * n);
+    let sum = f100
+        .to_string()
+        .chars()
+        .map(|c| c.to_digit(10).unwrap())
+        .sum::<u32>();
+    sum.to_string()
+}
