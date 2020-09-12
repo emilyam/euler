@@ -35,23 +35,10 @@ fn solve(n: usize, optimized: bool) {
     use std::collections::HashMap;
 
     let problems: Vec<(usize, &dyn Fn() -> String)> = vec![
-        (1, &p1),
-        (2, &p2),
-        (3, &p3),
-        (4, &p4),
-        (5, &p5),
-        (6, &p6),
-        (7, &p7),
-        (8, &p8),
-        (9, &p9),
-        (10, &p10),
-        (11, &p11),
-        (12, &p12),
-        (13, &p13),
-        (14, &p14),
-        (15, &p15),
-        (16, &p16),
-        (17, &p17),
+        (1, &p1),   (2, &p2),   (3, &p3),   (4, &p4),   (5, &p5),
+        (6, &p6),   (7, &p7),   (8, &p8),   (9, &p9),   (10, &p10),
+        (11, &p11), (12, &p12), (13, &p13), (14, &p14), (15, &p15),
+        (16, &p16), (17, &p17), (18, &p18),
     ];
     let problems: HashMap<usize, &dyn Fn() -> String> = problems.iter().cloned().collect();
 
