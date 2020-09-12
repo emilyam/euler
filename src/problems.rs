@@ -498,3 +498,56 @@ pub fn p18() -> String {
     }
     values[0][0].to_string()
 }
+
+/// How many Sundays fell on the first of the month during the twentieth century (1 Jan 1901 to 31 Dec 2000)?
+pub fn p19() -> String {
+    /*      |Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|
+     * ¬leap| 0 | 3 | 3 | 6 | 1 | 4 | 6 | 2 | 5 | 0 | 3 | 5 |
+     *  leap| 0 | 3 | 4 | 0 | 2 | 5 | 0 | 3 | 6 | 1 | 4 | 6 |
+     *
+     *      |Jan|Sun|lp.|¬lp|
+     *      | 0 | 0 | 3 | 2 |
+     *      | 1 | 6 | 2 | 2 |
+     *      | 2 | 5 | 1 | 2 |
+     *      | 3 | 4 | 2 | 1 |
+     *      | 4 | 3 | 2 | 3 |
+     *      | 5 | 2 | 1 | 1 |
+     *      | 6 | 1 | 1 | 1 |
+     */
+
+    // Number of months that start on Sunday, if Jan 1 is n,
+    // where n is the day of the week such that 0 is Sunday
+    let sunday_1sts = [2, 2, 2, 1, 3, 1, 1];
+    let sunday_1sts_leap = [3, 2, 1, 2, 2, 1, 1];
+
+    // Returns the day of the week of Jan 1 of the next year
+    let next_jan_1 = |jan_1_day, leap_year| {
+        if leap_year {
+            (jan_1_day + 2) % 7
+        } else {
+            (jan_1_day + 1) % 7
+        }
+    };
+
+    // Returns whether the year is a leap year
+    // since we know every year divisible by four is a leap year
+    // within the bounds [1901,2000], we can optimise from
+    // y % 4 == 0 && (y % 100 != 0 || y % 400 == 0)
+    let is_leap = |y| y % 4 == 0;
+
+    // Set 1901 values
+    let mut year = 1901;
+    let mut weekday = next_jan_1(1, true);
+    let mut sum = 0;
+    while year <= 2000 {
+        if is_leap(year) {
+            sum += sunday_1sts_leap[weekday];
+            weekday = next_jan_1(weekday, true);
+        } else {
+            sum += sunday_1sts[weekday];
+            weekday = next_jan_1(weekday, false);
+        }
+        year += 1;
+    }
+    sum.to_string()
+}
