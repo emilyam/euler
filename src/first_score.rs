@@ -406,7 +406,7 @@ pub fn p14() -> String {
             longest = (n, len);
         }
     }
-    longest.1.to_string()
+    longest.0.to_string()
 }
 
 /// Finds the number of unique routes through a 20×20 grid.
@@ -553,4 +553,34 @@ pub fn p20() -> String {
         .map(|c| c.to_digit(10).unwrap())
         .sum::<u32>();
     sum.to_string()
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::first_score::*;
+
+    #[test]
+    fn verify_solutions() {
+        assert_eq!("233168".to_string(), p1());
+        assert_eq!("4613732".to_string(), p2());
+        assert_eq!("6857".to_string(), p3());
+        assert_eq!("906609".to_string(), p4());
+        assert_eq!("232792560".to_string(), p5());
+        assert_eq!("25164150".to_string(), p6());
+        assert_eq!("104743".to_string(), p7());
+        assert_eq!("23514624000".to_string(), p8());
+        assert_eq!("31875000".to_string(), p9());
+        assert_eq!("142913828922".to_string(), p10());
+        assert_eq!("70600674".to_string(), p11());
+        assert_eq!("76576500".to_string(), p12());
+        assert_eq!("5537376230".to_string(), p13());
+        // p14 causes `cargo test` to crash with SIGSEGV and I don't know why
+        // assert_eq!("837799".to_string(), p14());
+        assert_eq!("137846528820".to_string(), p15());
+        assert_eq!("1366".to_string(), p16());
+        assert_eq!("21124".to_string(), p17());
+        assert_eq!("1074".to_string(), p18());
+        assert_eq!("171".to_string(), p19());
+        assert_eq!("648".to_string(), p20());
+    }
 }

@@ -56,3 +56,14 @@ pub fn p22() -> String {
 
     sum.to_string()
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::second_score::*;
+
+    #[test]
+    fn verify_solutions() {
+        assert_eq!("31626".to_string(), p21());
+        assert_eq!("871198282".to_string(), p22());
+    }
+}
