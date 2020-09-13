@@ -1,5 +1,6 @@
 mod helpers;
-mod problems;
+mod first_score;
+mod second_score;
 
 use clap::{value_t, App, Arg};
 
@@ -16,7 +17,8 @@ fn main() {
 }
 
 fn solve(n: usize) {
-    use problems::*;
+    use first_score::*;
+    use second_score::*;
     use std::collections::HashMap;
 
     let problems: Vec<(usize, &dyn Fn() -> String)> = vec![
