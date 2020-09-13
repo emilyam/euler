@@ -1,4 +1,4 @@
-/// Evaluate the sum of all the amicable numbers under 10000.
+/// Evaluates the sum of all the amicable numbers under 10000.
 pub fn p21() -> String {
     const LIMIT: usize = 10_000;
     // First, construct a table of the aliquot sum of all n < 10000

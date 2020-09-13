@@ -2,19 +2,19 @@ use super::helpers::*;
 use num_bigint::{BigUint, ToBigUint};
 use std::cmp::max;
 
-/// Find the sum of all the multiples of 3 or 5 below 1000.
+/// Finds the sum of all the multiples of 3 or 5 below 1000.
 pub fn p1() -> String {
-    let mut sum: i64 = 0;
+    let mut sum: u32 = 0;
     for i in 1..1000 {
         if (i % 3 == 0) || (i % 5 == 0) { sum += i; }
     }
     sum.to_string()
 }
 
-/// By considering the terms in the Fibonacci sequence whose values do not
-/// exceed four million, find the sum of the even-valued terms.
+/// Finds the sum of the even-valued terms of the Fibonnaci sequence
+/// whose values do not exceed four million.
 pub fn p2() -> String {
-    let mut sum: i64 = 0;
+    let mut sum: u32 = 0;
     let mut prev = 0;
     let mut curr = 1;
     while curr < 4_000_000 {
@@ -26,12 +26,12 @@ pub fn p2() -> String {
     sum.to_string()
 }
 
-/// What is the largest prime factor of the number 600851475143 ?
+/// Finds the largest prime factor of the number 600851475143.
 pub fn p3() -> String {
     let target = 600851475143;
     let mut curr_val = target;
     let mut curr_prime = 1;
-    let mut factors: Vec<i64> = Vec::new();
+    let mut factors: Vec<u64> = Vec::new();
     while curr_val != 1 {
         // deliberately skipping all even numbers as the target is odd
         curr_prime += 2;
@@ -41,12 +41,12 @@ pub fn p3() -> String {
         }
     }
     // Check answer
-    curr_val = factors.iter().product::<i64>();
+    curr_val = factors.iter().product::<u64>();
     assert_eq!(curr_val, target);
     curr_prime.to_string()
 }
 
-/// Find the largest palindrome made from the product of two 3-digit numbers.
+/// Finds the largest palindrome made from the product of two 3-digit numbers.
 pub fn p4() -> String {
     let mut largest_palindrome = 0;
     for x in 100..1000 {
@@ -59,30 +59,32 @@ pub fn p4() -> String {
     largest_palindrome.to_string()
 }
 
-/// What is the smallest positive number that is evenly divisible by all of
+/// Finds the smallest positive number that is evenly divisible by all of
 /// the numbers from 1 to 20?
 pub fn p5() -> String {
     let lcm = 9699690; //lcm of all primes below 20; answer must be a multiple
-    let mut index = lcm;
+    let mut candidate = lcm;
     let mut evenly_divides = false;
+    // Loops through multiples of the lcm until finding the solution 
     while !evenly_divides {
-        index += lcm;
+        candidate += lcm;
         evenly_divides = true;
+        // Check if each (non-trivial) number below 20 evenly divides it
         for n in 2..21 {
-            if index % n != 0 {
+            if candidate % n != 0 {
                 evenly_divides = false;
                 break;
             }
         }
     }
-    index.to_string()
+    candidate.to_string()
 }
 
-/// Find the difference between the sum of the squares of the first one hundred
+/// Finds the difference between the sum of the squares of the first one hundred
 /// natural numbers and the square of the sum.
 pub fn p6() -> String {
-    let mut sum: i64 = 0;
-    let mut sumsquares: i64 = 0;
+    let mut sum: u32 = 0;
+    let mut sumsquares: u32 = 0;
     for n in 1..101 {
         sum += n;
         sumsquares += n * n;
@@ -91,10 +93,11 @@ pub fn p6() -> String {
     (squaresum - sumsquares).to_string()
 }
 
-/// What is the 10 001st prime number?
+/// Finds the 10,001st prime number.
 pub fn p7() -> String {
     let mut primes = vec![2];
     let mut n = 1;
+    // Use trial division to find primes up to the 10,001st
     while primes.len() != 10_001 {
         n += 2;
         if !primes.iter().any(|x| n % x == 0) {
@@ -104,8 +107,8 @@ pub fn p7() -> String {
     n.to_string()
 }
 
-/// Find the thirteen adjacent digits in the 1000-digit number that have the
-/// greatest product. What is the value of this product?
+/// Finds the maximum value of the product of thirteen adjacent digits
+/// in the given 1000-digit number.
 pub fn p8() -> String {
     let digits = "73167176531330624919225119674426574742355349194934\
                   96983520312774506326239578318016984801869478851843\
@@ -140,8 +143,7 @@ pub fn p8() -> String {
     largest.to_string()
 }
 
-/// There exists exactly one Pythagorean triplet for which a + b + c = 1000.
-/// Find the product abc.
+/// Finds the product abc of the sole Pythagorean triplet for which a + b + c = 1000.
 pub fn p9() -> String {
     for a in 1..333 {
         for b in (a + 1)..((1000 - a) / 2) {
@@ -154,7 +156,7 @@ pub fn p9() -> String {
     0.to_string()
 }
 
-/// Find the sum of all the primes below two million.
+/// Finds the sum of all the primes below two million.
 pub fn p10() -> String {
     let primes = primes_under(2_000_000);
 
@@ -163,8 +165,8 @@ pub fn p10() -> String {
     sum.to_string()
 }
 
-/// What is the greatest product of four adjacent numbers in the same direction
-/// (up, down, left, right, or diagonally) in the 20×20 grid?
+/// Finds the greatest product of four adjacent numbers in the same direction
+/// (up, down, left, right, or diagonally) in the 20×20 grid provided.
 pub fn p11() -> String {
     let grid = [[ 8,  2, 22, 97, 38, 15,  0, 40,  0, 75,  4,  5,  7, 78, 52, 12, 50, 77, 91,  8],
                 [49, 49, 99, 40, 17, 81, 18, 57, 60, 87, 17, 40, 98, 43, 69, 48,  4, 56, 62,  0],
@@ -216,7 +218,7 @@ pub fn p11() -> String {
     greatest.to_string()
 }
 
-/// What is the value of the first triangle number to have over five hundred divisors?
+/// Finds the value of the first triangle number to have over five hundred divisors.
 pub fn p12() -> String {
     let mut n = 1;
     let tri = |n| n * (n + 1) / 2;
@@ -236,7 +238,7 @@ pub fn p12() -> String {
     tri(n).to_string()
 }
 
-/// Work out the first ten digits of the sum of the following one-hundred 50-digit numbers.
+/// Finds the first ten digits of the sum of the 100 provided 50-digit numbers.
 pub fn p13() -> String {
     let addends = [
         "37107287533902102798797998220837590246510135740250",
@@ -341,14 +343,14 @@ pub fn p13() -> String {
         "53503534226472524250874054075591789781264330331690",
     ];
 
-    let mut sum: BigUint = "0".parse::<BigUint>().unwrap();
+    let mut sum: BigUint = 0.to_biguint().unwrap();
     for n in addends.iter() {
         sum += n.parse::<BigUint>().unwrap();
     }
     sum.to_string()[0..10].to_string()
 }
 
-/// Which starting number, under one million, produces the longest [Collatz sequence]?
+/// Finds which starting number under one million produces the longest Collatz sequence.
 pub fn p14() -> String {
     // Table of C(n), where C(n) is the length of
     // the Collatz sequence beginning at n
@@ -407,7 +409,7 @@ pub fn p14() -> String {
     longest.1.to_string()
 }
 
-/// How many [...] routes are there through a 20×20 grid?
+/// Finds the number of unique routes through a 20×20 grid.
 pub fn p15() -> String {
     // The solution can be easily calculated as
     // P(40,40)/(C(20,20)^2) = C(40,20)
@@ -425,7 +427,7 @@ pub fn p15() -> String {
     num_routes.to_string()
 }
 
-/// What is the sum of the digits of the number 2^1000?
+/// Finds the sum of the digits of the number 2^1000.
 pub fn p16() -> String {
     let n = 2.to_biguint().unwrap().pow(1000);
     n.to_str_radix(10)
@@ -435,8 +437,8 @@ pub fn p16() -> String {
         .to_string()
 }
 
-/// If all the numbers from 1 to 1000 (one thousand) inclusive
-/// were written out in words, how many letters would be used?
+/// Determines how many letters would be used if all the numbers from 1 to 1000
+/// inclusive were written out in words.
 pub fn p17() -> String {
     let under_20_len = [0, 3, 3, 5, 4, 4, 3, 5, 5, 4, 3, 6, 6, 8, 8, 7, 7, 9, 8, 8];
     let tens_name_len = [6, 6, 5, 5, 5, 7, 6, 6]; // 20, 30, ... 90
@@ -469,11 +471,11 @@ pub fn p17() -> String {
 
     (1..1001)
         .map(|n| english(n).unwrap())
-        .sum::<usize>()
+        .sum::<u32>()
         .to_string()
 }
 
-/// Find the maximum total from top to bottom of the triangle [given]
+/// Finds the maximum total from top to bottom of the given triangle.
 pub fn p18() -> String {
     let mut values = [vec![75],
                       vec![95,64],
@@ -500,22 +502,9 @@ pub fn p18() -> String {
     values[0][0].to_string()
 }
 
-/// How many Sundays fell on the first of the month during the twentieth century (1 Jan 1901 to 31 Dec 2000)?
+/// Finds how many Sundays fell on the first of the month
+/// during the twentieth century (1 Jan 1901 to 31 Dec 2000).
 pub fn p19() -> String {
-    /*      |Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|
-     * ¬leap| 0 | 3 | 3 | 6 | 1 | 4 | 6 | 2 | 5 | 0 | 3 | 5 |
-     *  leap| 0 | 3 | 4 | 0 | 2 | 5 | 0 | 3 | 6 | 1 | 4 | 6 |
-     *
-     *      |Jan|Sun|lp.|¬lp|
-     *      | 0 | 0 | 3 | 2 |
-     *      | 1 | 6 | 2 | 2 |
-     *      | 2 | 5 | 1 | 2 |
-     *      | 3 | 4 | 2 | 1 |
-     *      | 4 | 3 | 2 | 3 |
-     *      | 5 | 2 | 1 | 1 |
-     *      | 6 | 1 | 1 | 1 |
-     */
-
     // Number of months that start on Sunday, if Jan 1 is n,
     // where n is the day of the week such that 0 is Sunday
     let sunday_1sts = [2, 2, 2, 1, 3, 1, 1];
@@ -553,7 +542,7 @@ pub fn p19() -> String {
     sum.to_string()
 }
 
-/// Find the sum of the digits in the number 100!
+/// Finds the sum of the digits in the number 100!.
 pub fn p20() -> String {
     let f100 = (1..101)
         .map(|n| n.to_biguint().unwrap())
