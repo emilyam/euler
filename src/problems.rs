@@ -156,15 +156,10 @@ pub fn p9() -> String {
 
 /// Find the sum of all the primes below two million.
 pub fn p10() -> String {
-    let oddprimes = odd_primes_under(2_000_000);
+    let primes = primes_under(2_000_000);
 
     // Sum all primes under LIMIT
-    let sum = 2 + oddprimes
-        .iter()
-        .enumerate()
-        .filter(|(_, &is_prime)| is_prime)
-        .map(|(n, _)| 2 * n + 1)
-        .sum::<usize>();
+    let sum = primes.iter().map(|&p| p as u64).sum::<u64>();
     sum.to_string()
 }
 

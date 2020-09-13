@@ -11,51 +11,41 @@ pub fn is_palindrome(n: i64) -> bool {
     true
 }
 
-/// Counts the number of natural divisors of n
-pub fn count_divisors(n: u64) -> u64 {
-    if n <= 2 {
-        return n;
-    }
-    let sqrt_n = n.integer_sqrt_checked().unwrap() as usize;
-    let odd_primes = odd_primes_under(sqrt_n + 1);
+/// Counts the number of divisors of n
+pub fn count_divisors(n: usize) -> u32 {
+    if n <= 2 { return n as u32; }
 
-    let mut n = n as usize;
-    let mut prime_table_index = 1;
+    let primes = primes_under(n / 2 + 1);
+    let mut divisor_count = 1;
 
-    // Where the prime factorization of n = (p1^a1)*(p2^a2)*...
-    // prime_factors[pi-1] = ai
-    // special case: prime_factors[0] = 1 iff n is prime
-    let mut prime_factors = vec![0; sqrt_n];
-    while n % 2 == 0 {
-        n /= 2;
-        prime_factors[1] += 1;
-    }
-    while n > 1 {
-        // Find next odd prime
-        while prime_table_index < sqrt_n / 2 && !odd_primes[prime_table_index] {
-            prime_table_index += 1;
+    // Find number of times each prime divides n
+    let mut curr = n;
+    let mut idx = 0;
+    let len = primes.len();
+    while curr > 1 && idx < len {
+        // Determine how many times p divides n
+        let p = primes[idx];
+        let mut times_divides = 0;
+        while curr % p == 0 {
+            curr /= p;
+            times_divides += 1;
         }
-        if prime_table_index < sqrt_n / 2 {
-            // p is the next odd prime
-            let p = 2 * prime_table_index + 1;
-            // Test divisibility
-            while n % p == 0 {
-                n /= p;
-                prime_factors[p - 1] += 1;
-            }
-            prime_table_index += 1;
-        } else {
-            // exhausted table; n must be prime
-            n = 1;
-            prime_factors[0] = 1;
-        }
+        // no. divisors is the product of 1 + how many times each p divides n
+        divisor_count *= 1 + times_divides;
+
+        idx += 1;
     }
-    prime_factors.iter().map(|f| f + 1).product::<u64>()
+    // Special case: we never test that n divides n,
+    // so if n is prime, we fail to count it.
+    // This check accounts for this case
+    if divisor_count < 2 { 2 } else { divisor_count }
 }
 
-/// Returns a table of odd primes below limit via the sieve of eratosthenes
-/// where oddprimes[n] = is_prime(2n+1)
-pub fn odd_primes_under(limit: usize) -> Vec<bool> {
+/// Returns a list of primes below limit via the sieve of eratosthenes
+pub fn primes_under(limit: usize) -> Vec<usize> {
+    if limit < 2 { return vec![]; }
+    if limit == 2 { return vec![2]; }
+
     let mut oddprimes = vec![true; limit / 2];
     oddprimes[0] = false; // 1 is not a prime
 
@@ -73,7 +63,16 @@ pub fn odd_primes_under(limit: usize) -> Vec<bool> {
         }
     }
 
-    oddprimes
+    // Convert odd prime indices to actual numbers
+    let mut primes: Vec<usize> = oddprimes
+        .iter()
+        .enumerate()
+        .filter_map(|(n, &is_prime)| {
+            if is_prime { Some(2 * n + 1) } else { None }
+        })
+        .collect();
+    primes.insert(0, 2);
+    primes
 }
 
 #[cfg(test)]
@@ -103,24 +102,22 @@ mod tests {
     }
 
     #[test]
-    fn test_odd_primes_under() {
-        let oddprimes = odd_primes_under(30);
+    fn test_primes_under() {
+        let mut primes = primes_under(30);
 
-        assert_eq!(oddprimes.len(), 15);
-        assert!(!oddprimes[0]); // 1
-        assert!(oddprimes[1]); // 3
-        assert!(oddprimes[2]); // 5
-        assert!(oddprimes[3]); // 7
-        assert!(!oddprimes[4]); // 9
-        assert!(oddprimes[5]); // 11
-        assert!(oddprimes[6]); // 13
-        assert!(!oddprimes[7]); // 15
-        assert!(oddprimes[8]); // 17
-        assert!(oddprimes[9]); // 19
-        assert!(!oddprimes[10]); // 21
-        assert!(oddprimes[11]); // 23
-        assert!(!oddprimes[12]); // 25
-        assert!(!oddprimes[13]); // 27
-        assert!(oddprimes[14]); // 29
+        assert_eq!(primes.pop(), Some(29));
+        assert_eq!(primes.pop(), Some(23));
+        assert_eq!(primes.pop(), Some(19));
+        assert_eq!(primes.pop(), Some(17));
+        assert_eq!(primes.pop(), Some(13));
+        assert_eq!(primes.pop(), Some(11));
+        assert_eq!(primes.pop(), Some(7));
+        assert_eq!(primes.pop(), Some(5));
+        assert_eq!(primes.pop(), Some(3));
+        assert_eq!(primes.pop(), Some(2));
+        assert_eq!(primes.pop(), None);
+
+        primes = primes_under(10_000_000);
+        assert_eq!(primes.len(), 664_579);
     }
 }
