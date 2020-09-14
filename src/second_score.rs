@@ -1,4 +1,5 @@
 use crate::helpers::*;
+use permutohedron::LexicalPermutation;
 
 /// Evaluates the sum of all the amicable numbers under 10000.
 pub fn p21() -> String {
@@ -83,6 +84,19 @@ pub fn p23() -> String {
         .to_string()
 }
 
+/// Finds the millionth lexicographic permutation of the digits [0,9].
+pub fn p24() -> String {
+    let mut digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+    for _ in 1..1_000_000 {
+        digits.next_permutation();
+    }
+
+    let mut s = String::new();
+    for d in digits.iter() { s.push_str(&(d.to_string())); }
+    s
+}
+
 #[cfg(test)]
 mod tests {
     use crate::second_score::*;
@@ -92,5 +106,6 @@ mod tests {
         assert_eq!("31626".to_string(), p21());
         assert_eq!("871198282".to_string(), p22());
         assert_eq!("4179871".to_string(), p23());
+        assert_eq!("2783915460".to_string(), p24());
     }
 }
