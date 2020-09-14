@@ -1,18 +1,11 @@
+use crate::helpers::*;
+
 /// Evaluates the sum of all the amicable numbers under 10000.
 pub fn p21() -> String {
     const LIMIT: usize = 10_000;
     // First, construct a table of the aliquot sum of all n < 10000
-    let mut aliquot_sum = [1; LIMIT + 1];
-    aliquot_sum[0] = 0;
-    aliquot_sum[1] = 0;
+    let aliquot_sum = aliquot_sums_under(LIMIT);
 
-    for n in 2..(LIMIT / 2) {
-        let mut x = 2 * n;
-        while x < LIMIT {
-            aliquot_sum[x] += n;
-            x += n;
-        }
-    }
     // Search aliquot_sum table for amicable numbers
     // This will miss any amicable numbers whose pair is greater than
     // LIMIT, but fortunately no such pairs exist.
@@ -57,6 +50,39 @@ pub fn p22() -> String {
     sum.to_string()
 }
 
+/// Finds the sum of every positive integer inexpressable as
+/// the sum of two abundant numbers (all of which are less than 28124).
+pub fn p23() -> String {
+    const LIMIT: usize = 28124;
+    let aliquot_sums = aliquot_sums_under(LIMIT);
+
+    // Find all abundant numbers
+    let abundant: Vec<usize> = aliquot_sums
+        .iter()
+        .enumerate()
+        .filter_map(|(n, &s)| if s > n { Some(n) } else { None })
+        .collect();
+
+    // Build table of sums of any two abundant numbers under LIMIT
+    let mut is_sum = [false; LIMIT];
+    let num_abundant = abundant.len();
+    for a in 0..num_abundant {
+        for b in a..num_abundant {
+            let sum = abundant[a] + abundant[b];
+            if sum < LIMIT {
+                is_sum[sum] = true;
+            }
+        }
+    }
+
+    // Sum all numbers inexpressable as the sum of any two abundant numbers
+    is_sum
+        .iter()
+        .enumerate()
+        .fold(0, |acc, (n, &is_sum)| if !is_sum { acc + n } else { acc })
+        .to_string()
+}
+
 #[cfg(test)]
 mod tests {
     use crate::second_score::*;
@@ -65,5 +91,6 @@ mod tests {
     fn verify_solutions() {
         assert_eq!("31626".to_string(), p21());
         assert_eq!("871198282".to_string(), p22());
+        assert_eq!("4179871".to_string(), p23());
     }
 }

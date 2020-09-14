@@ -1,6 +1,6 @@
 use integer_sqrt::IntegerSquareRoot;
 
-/// Determines if n is a palindrome in decimal representation
+/// Determines if n is a palindrome in decimal representation.
 pub fn is_palindrome(n: i64) -> bool {
     let s = n.to_string().chars().collect::<Vec<char>>();
     for i in 0..(s.len() / 2) {
@@ -11,7 +11,7 @@ pub fn is_palindrome(n: i64) -> bool {
     true
 }
 
-/// Counts the number of divisors of n
+/// Counts the number of divisors of n.
 pub fn count_divisors(n: usize) -> u32 {
     if n <= 2 { return n as u32; }
 
@@ -41,7 +41,7 @@ pub fn count_divisors(n: usize) -> u32 {
     if divisor_count < 2 { 2 } else { divisor_count }
 }
 
-/// Returns a list of primes below limit via the sieve of eratosthenes
+/// Returns a list of primes below limit via the sieve of eratosthenes.
 pub fn primes_under(limit: usize) -> Vec<usize> {
     if limit < 2 { return vec![]; }
     if limit == 2 { return vec![2]; }
@@ -73,6 +73,23 @@ pub fn primes_under(limit: usize) -> Vec<usize> {
         .collect();
     primes.insert(0, 2);
     primes
+}
+
+/// Constructs a table of aliquot sums of all numbers less than limit.
+pub fn aliquot_sums_under(limit: usize) -> Vec<usize> {
+    let mut aliquot_sum = vec![1; limit];
+    aliquot_sum[0] = 0;
+    aliquot_sum[1] = 0;
+
+    for n in 2..(limit / 2) {
+        let mut x = 2 * n;
+        while x < limit {
+            aliquot_sum[x] += n;
+            x += n;
+        }
+    }
+
+    aliquot_sum
 }
 
 #[cfg(test)]
@@ -119,5 +136,27 @@ mod tests {
 
         primes = primes_under(10_000_000);
         assert_eq!(primes.len(), 664_579);
+    }
+
+    #[test]
+    fn test_aliquot_sums_under() {
+        let table = aliquot_sums_under(16);
+        assert_eq!(table[0], 0);
+        assert_eq!(table[1], 0);
+        assert_eq!(table[2], 1);
+        assert_eq!(table[3], 1);
+        assert_eq!(table[4], 3);
+        assert_eq!(table[5], 1);
+        assert_eq!(table[6], 6);
+        assert_eq!(table[7], 1);
+        assert_eq!(table[8], 7);
+        assert_eq!(table[9], 4);
+        assert_eq!(table[10], 8);
+        assert_eq!(table[11], 1);
+        assert_eq!(table[12], 16);
+        assert_eq!(table[13], 1);
+        assert_eq!(table[14], 10);
+        assert_eq!(table[15], 9);
+        assert_eq!(table.len(), 16);
     }
 }
