@@ -97,6 +97,20 @@ pub fn p24() -> String {
     s
 }
 
+/// Find the (one-indexed) index of the first term of the Fibonacci sequence
+/// to contain 1000 digits.
+///
+/// Since F(n) ≈ φ^n/sqrt(5), we can calculate the smallest n such that:
+/// n ≈ logφ(sqrt(5) * (10^999 - 1/2))
+/// n ≈ logφ(sqrt(5)) + 999logφ(10)
+pub fn p25() -> String {
+    let sqrt5: f32 = 5.0_f32.sqrt();
+    let phi: f32 = (1.0 + sqrt5) / 2.0;
+
+    let n: f32 = (sqrt5.log(phi) + 999.0 * 10.0_f32.log(phi)).round();
+    n.to_string()
+}
+
 #[cfg(test)]
 mod tests {
     use crate::second_score::*;
@@ -107,5 +121,6 @@ mod tests {
         assert_eq!("871198282".to_string(), p22());
         assert_eq!("4179871".to_string(), p23());
         assert_eq!("2783915460".to_string(), p24());
+        assert_eq!("4782".to_string(), p25());
     }
 }
