@@ -1,4 +1,6 @@
 use crate::helpers::*;
+use crate::prime_table::*;
+use num_bigint::ToBigUint;
 use permutohedron::LexicalPermutation;
 
 /// Evaluates the sum of all the amicable numbers under 10000.
@@ -93,7 +95,9 @@ pub fn p24() -> String {
     }
 
     let mut s = String::new();
-    for d in digits.iter() { s.push_str(&(d.to_string())); }
+    for d in digits.iter() {
+        s.push_str(&(d.to_string()));
+    }
     s
 }
 
@@ -105,8 +109,8 @@ pub fn p24() -> String {
 /// F(n) ≥ 10^999
 ///    n ≥ logφ(√5) * (10^999 - 1/2))
 ///    n ≥ logφ(√5) + 999logφ(10)
-/// Note that since log(10^999 - 1/2) is extremely close to log(10^999) 
-/// (the difference is smaller than floating point error), 
+/// Note that since log(10^999 - 1/2) is extremely close to log(10^999)
+/// (the difference is smaller than floating point error),
 /// we can safely ignore the 1/2 term.
 pub fn p25() -> String {
     let sqrt5: f32 = 5.0_f32.sqrt();
@@ -114,6 +118,49 @@ pub fn p25() -> String {
 
     let n: f32 = (sqrt5.log(phi) + 999.0 * 10.0_f32.log(phi)).ceil();
     n.to_string()
+}
+
+/// Find the natural number d < 1000 such that the decimal representation of its reciprocal
+/// contains a repetend with the longest cycle of any natural number under 1000.
+///
+/// Since the period of 1/k is strictly less than k, we can count from the top of the range
+/// and stop once d is less than the largest period encountered.
+///
+/// see http://mathforum.org/library/drmath/view/67018.html
+pub fn p26() -> String {
+    let pt = prime_table::primes_under(500);
+    let mut d = 0;
+    let mut largest_period = 0;
+
+    let big = |n: usize| { n.to_biguint().unwrap() };
+    // Compute repetend period of 1/n
+    let period = |n| {
+        let ft = pt.get_prime_factors(n);
+        let phi = ft.euler_phi();
+        let phi_ft = pt.get_prime_factors(phi);
+        let mut phi_prime_factors = phi_ft.factors;
+        phi_prime_factors.dedup();
+        let mut d = phi;
+
+        for f in phi_prime_factors.iter() {
+            while d % f == 0 && big(10).pow((d / f) as u32) % n == big(1)
+            {
+                d /= f;
+            }
+        }
+        d
+    };
+
+    let mut curr = 999;
+    while curr > largest_period {
+        let p = period(curr);
+        if p > largest_period {
+            d = curr;
+            largest_period = p;
+        }
+        curr -= 1;
+    }
+    d.to_string()
 }
 
 #[cfg(test)]
@@ -127,5 +174,6 @@ mod tests {
         assert_eq!("4179871".to_string(), p23());
         assert_eq!("2783915460".to_string(), p24());
         assert_eq!("4782".to_string(), p25());
+        assert_eq!("983".to_string(), p26());
     }
 }

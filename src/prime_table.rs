@@ -113,15 +113,9 @@ pub mod prime_table {
         let mut primes: Vec<usize> = oddprimes
             .iter()
             .enumerate()
-            .filter_map(
-                |(n, &is_prime)| {
-                    if is_prime {
-                        Some(2 * n + 1)
-                    } else {
-                        None
-                    }
-                },
-            )
+            .filter_map(|(n, &is_prime)| {
+                if is_prime { Some(2 * n + 1) } else { None }
+            })
             .collect();
         primes.insert(0, 2);
 

@@ -28,6 +28,7 @@ fn solve(n: usize) {
         (11, &p11), (12, &p12), (13, &p13), (14, &p14), (15, &p15),
         (16, &p16), (17, &p17), (18, &p18), (19, &p19), (20, &p20),
         (21, &p21), (22, &p22), (23, &p23), (24, &p24), (25, &p25),
+        (26, &p26),
     ];
     let problems: HashMap<usize, &dyn Fn() -> String> = problems.iter().cloned().collect();
 
