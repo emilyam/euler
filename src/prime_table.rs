@@ -16,26 +16,50 @@ pub mod prime_table {
     }
 
     impl FactorTable {
+        /// Counts the number of divisors of n.
         pub fn count_divisors(&self) -> usize {
-            if self.n <= 2 { return self.n; }
+            if self.n <= 2 {
+                return self.n;
+            }
+
+            self.prime_powers()
+                .iter()
+                .fold(1, |acc, &(_p, a)| acc * (a + 1))
+        }
+
+        /// Finds the value of the Euler phi function for n
+        pub fn euler_phi(&self) -> usize {
+            if self.n < 2 { return self.n; }
+            self.prime_powers()
+                .iter()
+                .fold(self.n, |acc, &(p, _a)| acc * (p - 1) / p)
+        }
+
+        /// Finds the exponents of each prime factor of n
+        fn prime_powers(&self) -> Vec<(usize, usize)> {
+            if self.factors.len() == 0 {
+                return vec![];
+            }
 
             let mut prime_factors = self.factors.clone();
+            let mut prime_powers: Vec<(usize, usize)> = vec![];
 
             let mut last_f = 0;
             let mut count_f = 0;
-            let mut product = 1;
             while let Some(f) = prime_factors.pop() {
                 if f == last_f {
                     count_f = count_f + 1;
                 } else {
-                    product *= count_f + 1;
+                    if count_f > 0 {
+                        prime_powers.push((last_f, count_f));
+                    }
                     last_f = f;
                     count_f = 1;
                 }
             }
-            product *= count_f + 1;
+            prime_powers.push((last_f, count_f));
 
-            return product;
+            prime_powers
         }
     }
 
@@ -89,9 +113,15 @@ pub mod prime_table {
         let mut primes: Vec<usize> = oddprimes
             .iter()
             .enumerate()
-            .filter_map(|(n, &is_prime)| {
-                if is_prime { Some(2 * n + 1) } else { None }
-            })
+            .filter_map(
+                |(n, &is_prime)| {
+                    if is_prime {
+                        Some(2 * n + 1)
+                    } else {
+                        None
+                    }
+                },
+            )
             .collect();
         primes.insert(0, 2);
 
@@ -133,7 +163,9 @@ pub mod prime_table {
                 idx += 1;
             }
             // Special case: if n is prime
-            if curr > 1 { prime_factors.push(curr) }
+            if curr > 1 {
+                prime_factors.push(curr)
+            }
 
             FactorTable {
                 factors: prime_factors,
@@ -204,5 +236,16 @@ mod prime_table_tests {
         assert_eq!(primetable.get_prime_factors(0xACAB).count_divisors(), 2);
         assert_eq!(primetable.get_prime_factors(69_420).count_divisors(), 48);
         assert_eq!(primetable.get_prime_factors(123_456_789).count_divisors(), 12);
+    }
+
+    #[test]
+    fn test_euler_phi() {
+        let primetable = prime_table::primes_under(3804);
+
+        assert_eq!(primetable.get_prime_factors(1).euler_phi(), 1);
+        assert_eq!(primetable.get_prime_factors(28).euler_phi(), 12);
+        assert_eq!(primetable.get_prime_factors(0xACAB).euler_phi(), 0xACAA);
+        assert_eq!(primetable.get_prime_factors(69_420).euler_phi(), 16_896);
+        assert_eq!(primetable.get_prime_factors(123_456_789).euler_phi(), 82_260_072);
     }
 }
