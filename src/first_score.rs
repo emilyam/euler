@@ -1,4 +1,5 @@
-use super::helpers::*;
+use crate::helpers::*;
+use crate::prime_table::*;
 use num_bigint::{BigUint, ToBigUint};
 use std::cmp::max;
 
@@ -158,7 +159,8 @@ pub fn p9() -> String {
 
 /// Finds the sum of all the primes below two million.
 pub fn p10() -> String {
-    let primes = primes_under(2_000_000);
+    let primetable = prime_table::primes_under(2_000_000);
+    let primes = primetable.primes;
 
     // Sum all primes under LIMIT
     let sum = primes.iter().map(|&p| p as u64).sum::<u64>();
@@ -220,6 +222,8 @@ pub fn p11() -> String {
 
 /// Finds the value of the first triangle number to have over five hundred divisors.
 pub fn p12() -> String {
+    let primetable = prime_table::primes_under(1300);
+
     let mut n = 1;
     let tri = |n| n * (n + 1) / 2;
     let mut divisors = 1;
@@ -229,9 +233,9 @@ pub fn p12() -> String {
         n += 1;
         div_n = div_n_next;
         div_n_next = if n % 2 == 0 {
-            count_divisors(n + 1)
+            primetable.get_prime_factors(n + 1).count_divisors()
         } else {
-            count_divisors((n + 1) / 2)
+            primetable.get_prime_factors((n + 1) / 2).count_divisors()
         };
         divisors = div_n * div_n_next;
     }

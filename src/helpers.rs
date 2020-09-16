@@ -1,5 +1,3 @@
-use integer_sqrt::IntegerSquareRoot;
-
 /// Determines if n is a palindrome in decimal representation.
 pub fn is_palindrome(n: i64) -> bool {
     let s = n.to_string().chars().collect::<Vec<char>>();
@@ -9,70 +7,6 @@ pub fn is_palindrome(n: i64) -> bool {
         }
     }
     true
-}
-
-/// Counts the number of divisors of n.
-pub fn count_divisors(n: usize) -> u32 {
-    if n <= 2 { return n as u32; }
-
-    let primes = primes_under(n / 2 + 1);
-    let mut divisor_count = 1;
-
-    // Find number of times each prime divides n
-    let mut curr = n;
-    let mut idx = 0;
-    let len = primes.len();
-    while curr > 1 && idx < len {
-        // Determine how many times p divides n
-        let p = primes[idx];
-        let mut times_divides = 0;
-        while curr % p == 0 {
-            curr /= p;
-            times_divides += 1;
-        }
-        // no. divisors is the product of 1 + how many times each p divides n
-        divisor_count *= 1 + times_divides;
-
-        idx += 1;
-    }
-    // Special case: we never test that n divides n,
-    // so if n is prime, we fail to count it.
-    // This check accounts for this case
-    if divisor_count < 2 { 2 } else { divisor_count }
-}
-
-/// Returns a list of primes below limit via the sieve of eratosthenes.
-pub fn primes_under(limit: usize) -> Vec<usize> {
-    if limit < 2 { return vec![]; }
-    if limit == 2 { return vec![2]; }
-
-    let mut oddprimes = vec![true; limit / 2];
-    oddprimes[0] = false; // 1 is not a prime
-
-    // To compute odd primes under limit, consider all odds in [2,√(limit)]
-    for n in 1..((limit.integer_sqrt_checked().unwrap() + 1) / 2) {
-        if !oddprimes[n] {
-            continue;
-        }
-
-        // Flag all odd multiples of odd primes as composite
-        let mut x = 3 * n + 1;
-        while x < limit / 2 {
-            oddprimes[x] = false;
-            x += 2 * n + 1;
-        }
-    }
-
-    // Convert odd prime indices to actual numbers
-    let mut primes: Vec<usize> = oddprimes
-        .iter()
-        .enumerate()
-        .filter_map(|(n, &is_prime)| {
-            if is_prime { Some(2 * n + 1) } else { None }
-        })
-        .collect();
-    primes.insert(0, 2);
-    primes
 }
 
 /// Constructs a table of aliquot sums of all numbers less than limit.
@@ -107,35 +41,6 @@ mod tests {
         for n in no.iter() {
             assert!(!is_palindrome(*n));
         }
-    }
-
-    #[test]
-    fn test_count_divisors() {
-        assert_eq!(count_divisors(1), 1);
-        assert_eq!(count_divisors(28), 6);
-        assert_eq!(count_divisors(0xACAB), 2);
-        assert_eq!(count_divisors(69_420), 48);
-        assert_eq!(count_divisors(123456789), 12);
-    }
-
-    #[test]
-    fn test_primes_under() {
-        let mut primes = primes_under(30);
-
-        assert_eq!(primes.pop(), Some(29));
-        assert_eq!(primes.pop(), Some(23));
-        assert_eq!(primes.pop(), Some(19));
-        assert_eq!(primes.pop(), Some(17));
-        assert_eq!(primes.pop(), Some(13));
-        assert_eq!(primes.pop(), Some(11));
-        assert_eq!(primes.pop(), Some(7));
-        assert_eq!(primes.pop(), Some(5));
-        assert_eq!(primes.pop(), Some(3));
-        assert_eq!(primes.pop(), Some(2));
-        assert_eq!(primes.pop(), None);
-
-        primes = primes_under(10_000_000);
-        assert_eq!(primes.len(), 664_579);
     }
 
     #[test]

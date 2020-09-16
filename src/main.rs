@@ -1,6 +1,7 @@
 mod helpers;
 mod first_score;
 mod second_score;
+mod prime_table;
 
 use clap::{value_t, App, Arg};
 

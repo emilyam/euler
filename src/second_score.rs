@@ -97,17 +97,22 @@ pub fn p24() -> String {
     s
 }
 
-/// Find the (one-indexed) index of the first term of the Fibonacci sequence
+/// Finds the (one-indexed) index of the first term of the Fibonacci sequence
 /// to contain 1000 digits.
 ///
-/// Since F(n) ≈ φ^n/sqrt(5), we can calculate the smallest n such that:
-/// n ≈ logφ(sqrt(5) * (10^999 - 1/2))
-/// n ≈ logφ(sqrt(5)) + 999logφ(10)
+/// Since the nth Fibonnaci number can be approximated with F(n) = ⌊φ^n/sqrt(5)+1/2⌋,
+/// we can calculate the smallest n such that:
+/// F(n) ≥ 10^999
+///    n ≥ logφ(√5) * (10^999 - 1/2))
+///    n ≥ logφ(√5) + 999logφ(10)
+/// Note that since log(10^999 - 1/2) is extremely close to log(10^999) 
+/// (the difference is smaller than floating point error), 
+/// we can safely ignore the 1/2 term.
 pub fn p25() -> String {
     let sqrt5: f32 = 5.0_f32.sqrt();
     let phi: f32 = (1.0 + sqrt5) / 2.0;
 
-    let n: f32 = (sqrt5.log(phi) + 999.0 * 10.0_f32.log(phi)).round();
+    let n: f32 = (sqrt5.log(phi) + 999.0 * 10.0_f32.log(phi)).ceil();
     n.to_string()
 }
 
